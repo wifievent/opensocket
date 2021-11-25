@@ -22,7 +22,7 @@ bool UdpServer::bind(int port) {
 
 bool UdpServer::start(int port) {
     if(bind(port)) {
-        th_ = new std::thread(&UdpServer::openHandleClnt);
+        th_ = new std::thread(&UdpServer::openHandleClnt, this);
         return true;
     }
     

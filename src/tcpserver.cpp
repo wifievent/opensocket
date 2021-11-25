@@ -46,7 +46,7 @@ void TcpServer::accept() {
         spdlog::debug("client accept: %d", clntsock);
         
         TcpClientSocket* newsocket = new TcpClientSocket(clntsock);
-        newsocket->handlethread_ = new std::thread(&TcpServer::openHandleClnt, newsocket);
+        newsocket->handlethread_ = new std::thread(&TcpServer::openHandleClnt, this, newsocket);
         
         clntsocks_.mutex_.lock();
         clntsocks_.insert(newsocket);
