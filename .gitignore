@@ -1,7 +1,5 @@
 .vscode
 
-external
-
 build/*
 !build/CMakeLists.txt
 
