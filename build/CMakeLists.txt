@@ -20,19 +20,39 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../external)
 
 # set socket base source
+set(SOCKET_BASE_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/socket.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/socket.cpp
+)
+set(TCP_BASE_SRC
+    ${SOCKET_BASE_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/tcpsocket.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/tcpsocket.cpp
+)
+set(UDP_BASE_SRC
+    ${SOCKET_BASE_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/udpsocket.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/udpsocket.cpp
+)
+
+# set server client source
 set(TCP_SERVER_SRC
+    ${TCP_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpserver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpserver.cpp
 )
 set(TCP_CLIENT_SRC
+    ${TCP_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpclient.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpclient.cpp
 )
 set(UDP_SERVER_SRC
+    ${UDP_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpserver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpserver.cpp
 )
 set(UDP_CLIENT_SRC
+    ${UDP_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpclient.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpclient.cpp
 )
