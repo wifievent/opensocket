@@ -2,8 +2,9 @@
 
 UdpSocket::UdpSocket() {
     if((sock_ = socket(PF_INET, SOCK_DGRAM, 0) < 0)) {
-        spdlog::debug("socket create failed");
+        spdlog::info("socket create failed");
     }
+    spdlog::info("socket create success");
 }
 
 UdpSocket::~UdpSocket() {
@@ -26,7 +27,7 @@ int UdpSocket::recv(char* buf, size_t len) {
     ssize_t recv_len = ::recvfrom(sock_, buf, len, 0, (struct sockaddr*)&sockAddr_, &sockLen);
     
     if (recv_len == -1) {
-        spdlog::debug("Can't recv data");
+        spdlog::info("Can't recv data");
     }
 
     return recv_len;

@@ -12,8 +12,8 @@ bool UdpServer::bind(int port) {
     sockAddr_.sin_addr.s_addr = INADDR_ANY;
     sockAddr_.sin_port = htons(port);
     
-    if (::bind(sock_, (struct sockaddr *)&sockAddr_, sizeof(sockAddr_)) == -1) {
-        spdlog::debug("bind() error");
+    if (::bind(sock_, (struct sockaddr*)&sockAddr_, sizeof(sockAddr_)) == -1) {
+        spdlog::info("bind() error");
         return false;
     }
 
@@ -22,16 +22,18 @@ bool UdpServer::bind(int port) {
 
 bool UdpServer::start(int port) {
     if(bind(port)) {
+        spdlog::info("bind() success");
         th_ = new std::thread(&UdpServer::openHandleClnt, this);
         return true;
     }
-    
+    spdlog::info("bind() fail");
     return false;
 }
 
 bool UdpServer::stop() {
     disconnect();
     th_->join();
+    return true;
 }
 
 int UdpServer::setSockOptforReuse() {
@@ -49,5 +51,5 @@ int UdpServer::setSockOptforReuse() {
 }
 
 void UdpServer::openHandleClnt() {
-    this->handleClnt();
+    handleClnt();
 }

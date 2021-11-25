@@ -13,7 +13,7 @@ bool TcpServer::bind(int port) {
     sockAddr_.sin_port = htons(port);
     
     if(::bind(sock_, (struct sockaddr*)&sockAddr_, sizeof(sockAddr_)) == -1) {
-        spdlog::debug("bind() error");
+        spdlog::info("bind() error");
         return false;
     }
 
@@ -22,7 +22,7 @@ bool TcpServer::bind(int port) {
 
 bool TcpServer::listen(int backlog) {
     if(::listen(sock_, backlog)==-1) {
-        spdlog::debug("listen() error");
+        spdlog::info("listen() error");
         return false;
     }
 
@@ -30,20 +30,20 @@ bool TcpServer::listen(int backlog) {
 }
 
 void TcpServer::accept() {
-    spdlog::debug("open!");
+    spdlog::info("open!");
     sockaddr_in cli_addr;
     unsigned int clntaddrsize = sizeof(cli_addr);
     int clntsock;
 
     while(true) {    // server thread
-        spdlog::debug("Wait for accept client");
+        spdlog::info("Wait for accept client");
         
         if((clntsock=::accept(sock_, (struct sockaddr*)&(cli_addr), &clntaddrsize)) < 0) {
-            spdlog::debug("Accept call failed");
+            spdlog::info("Accept call failed");
             break;
         }
         
-        spdlog::debug("client accept: %d", clntsock);
+        spdlog::info("client accept: %d", clntsock);
         
         TcpClientSocket* newsocket = new TcpClientSocket(clntsock);
         newsocket->handlethread_ = new std::thread(&TcpServer::openHandleClnt, this, newsocket);
@@ -56,10 +56,12 @@ void TcpServer::accept() {
 
 bool TcpServer::start(int port, int backlog) {
     if(bind(port) && listen(backlog)) {
+        spdlog::info("bind() listen() success");
         acceptthread_ = new std::thread(&TcpServer::accept, this);
         return true;
     }
-
+    
+    spdlog::info("bind() listen() fail");
     return false;
 }
 
