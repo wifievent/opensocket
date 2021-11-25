@@ -1,7 +1,7 @@
 #include "udpsocket.h"
 
 UdpSocket::UdpSocket() {
-    if((sock_ = socket(PF_INET, SOCK_DGRAM, 0) < 0)) {
+    if((sock_ = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
         spdlog::info("socket create failed");
     }
     spdlog::info("socket create success");
