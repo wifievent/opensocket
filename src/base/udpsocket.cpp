@@ -3,6 +3,7 @@
 UdpSocket::UdpSocket() {
     if((sock_ = socket(PF_INET, SOCK_DGRAM, 0)) < 0) {
         spdlog::info("socket create failed");
+        sock_ = 0;
     }
     spdlog::info("socket create success");
 }

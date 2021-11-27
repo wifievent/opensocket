@@ -1,5 +1,4 @@
-#ifndef UDPCLIENT_H
-#define UDPCLIENT_H
+#pragma once
 
 #include <string>
 
@@ -16,5 +15,3 @@ public:
     void setSockAddr(std::string ip, int port);
     void setRecvTimeout(int sec, int millisec);
 };
-
-#endif // UDPCLIENT_H
