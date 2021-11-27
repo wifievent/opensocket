@@ -1,3 +1,6 @@
 .vscode
 
-src/spdlog
+build/*
+!build/CMakeLists.txt
+
+lib
