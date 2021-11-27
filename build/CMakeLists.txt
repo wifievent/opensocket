@@ -24,35 +24,35 @@ set(SOCKET_BASE_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/socket.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/socket.cpp
 )
+
+# TCP Socket base source
 set(TCP_BASE_SRC
     ${SOCKET_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/tcpsocket.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/tcpsocket.cpp
 )
+
+# UDP Socket base source
 set(UDP_BASE_SRC
     ${SOCKET_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/udpsocket.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/udpsocket.cpp
 )
 
-# set server client source
-set(TCP_SERVER_SRC
-    ${TCP_BASE_SRC}
+# TCP Server/Client source
+set(TCP_SC_SRC
+    ${SOCKET_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpserver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpserver.cpp
-)
-set(TCP_CLIENT_SRC
-    ${TCP_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpclient.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpclient.cpp
 )
-set(UDP_SERVER_SRC
+
+# UDP Server/Client source
+set(UDP_SC_SRC
     ${UDP_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpserver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpserver.cpp
-)
-set(UDP_CLIENT_SRC
-    ${UDP_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpclient.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpclient.cpp
 )
@@ -65,44 +65,13 @@ set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../lib)
 
 # set tcp-socket library result
 add_library(
-    tcpserver
+    opensocket
     STATIC
-    ${TCP_SERVER_SRC}
+    ${TCP_SC_SRC}
+    ${UDP_SC_SRC}
 )
 set_target_properties(
-    tcpserver
+    opensocket
     PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR}
-    OUTPUT_NAME tcp-server
-)
-add_library(
-    tcpclient
-    STATIC
-    ${TCP_CLIENT_SRC}
-)
-set_target_properties(
-    tcpclient
-    PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR}
-    OUTPUT_NAME tcp-client
-)
-
-# set udp-socket library result
-add_library(
-    udpserver
-    STATIC
-    ${UDP_SERVER_SRC}
-)
-set_target_properties(
-    udpserver
-    PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR}
-    OUTPUT_NAME udp-server
-)
-add_library(
-    udpclient
-    STATIC
-    ${UDP_CLIENT_SRC}
-)
-set_target_properties(
-    udpclient
-    PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR}
-    OUTPUT_NAME udp-client
+    OUTPUT_NAME opensocket
 )
