@@ -5,6 +5,8 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
+//problem to make SSL_free and SSL_shutdown
+
 class SslSocket : public Socket
 {
 public:
@@ -14,10 +16,6 @@ public:
 public:
     SslSocket();
     ~SslSocket() override;
-
-protected:
-    bool createContext();
-    bool configureContext(std::string certFilePath, std::string keyFilePath);
 
 public:
     int send(char* buf, size_t len) override;

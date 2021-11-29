@@ -40,6 +40,8 @@ protected:
     void deleteClnt(SslClientSocket* clntsock);
     void openHandleClnt(SslClientSocket* clntsock);
     virtual void handleClnt(SslClientSocket* clntsock) = 0;
+    bool createContext();
+    bool configureContext(std::string certFilePath, std::string keyFilePath);
 };
 
 #endif // SSLSERVER_H
