@@ -105,11 +105,11 @@ bool SslServer::createContext() {
 }
 
 bool SslServer::configureContext(std::string certFilePath, std::string keyFilePath) {
-    if(SSL_CTX_use_certificate_file(ctx_, ("../../"+certFilePath).c_str(), SSL_FILETYPE_PEM) <= 0) {
+    if(SSL_CTX_use_certificate_file(ctx_, certFilePath.c_str(), SSL_FILETYPE_PEM) <= 0) {
         spdlog::debug("Unable to configureContext in certfile");
         return false;
     }
-    if(SSL_CTX_use_PrivateKey_file(ctx_, ("../../"+keyFilePath).c_str(), SSL_FILETYPE_PEM) <= 0) {
+    if(SSL_CTX_use_PrivateKey_file(ctx_, keyFilePath.c_str(), SSL_FILETYPE_PEM) <= 0) {
         spdlog::debug("Unable to configureContext in keyfile");
         return false;
     }
