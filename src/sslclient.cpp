@@ -21,6 +21,9 @@ int SslClient::connect(std::string ip, int port) { // connect
     }
     return 0;
     // success 0, fail -1
+    //SSL_shutdown(ssl_);
+    //SSL_free(ssl_);
+    //SSL_CTX_free(ctx_);
 }
 
 bool SslClient::createContext() {
