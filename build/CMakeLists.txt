@@ -40,7 +40,7 @@ set(UDP_BASE_SRC
 )
 
 # SSL Socket base source
-set(UDP_BASE_SRC
+set(SSL_BASE_SRC
     ${SOCKET_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/sslsocket.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/sslsocket.cpp
@@ -48,7 +48,7 @@ set(UDP_BASE_SRC
 
 # TCP Server/Client source
 set(TCP_SC_SRC
-    ${SOCKET_BASE_SRC}
+    ${TCP_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpserver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpserver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpclient.h
@@ -69,8 +69,8 @@ set(SSL_SC_SRC
     ${SSL_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslserver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslserver.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/../src/sslclient.h
-    #${CMAKE_CURRENT_SOURCE_DIR}/../src/sslclient.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslclient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslclient.cpp
 )
 
 # static library set
