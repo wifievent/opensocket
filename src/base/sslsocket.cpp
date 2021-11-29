@@ -21,6 +21,7 @@ bool SslSocket::createContext() {
         spdlog::debug("Unable to create SSL context");
         return false;
     }
+    return true;
 }
 
 bool SslSocket::configureContext(std::string certFilePath, std::string keyFilePath) {
@@ -33,6 +34,7 @@ bool SslSocket::configureContext(std::string certFilePath, std::string keyFilePa
         spdlog::debug("Unable to configureContext in keyfile");
         return false;
     }
+    return true;
 }
 
 int SslSocket::send(char* buf, size_t len)

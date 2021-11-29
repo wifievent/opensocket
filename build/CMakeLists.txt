@@ -39,6 +39,13 @@ set(UDP_BASE_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/udpsocket.cpp
 )
 
+# SSL Socket base source
+set(UDP_BASE_SRC
+    ${SOCKET_BASE_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/sslsocket.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/sslsocket.cpp
+)
+
 # TCP Server/Client source
 set(TCP_SC_SRC
     ${SOCKET_BASE_SRC}
@@ -57,6 +64,15 @@ set(UDP_SC_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpclient.cpp
 )
 
+# SSL Server/Client source
+set(SSL_SC_SRC
+    ${SSL_BASE_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslserver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslserver.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/../src/sslclient.h
+    #${CMAKE_CURRENT_SOURCE_DIR}/../src/sslclient.cpp
+)
+
 # static library set
 set(-DBUILD_SHARED_LIBS OFF)
 
@@ -69,6 +85,7 @@ add_library(
     STATIC
     ${TCP_SC_SRC}
     ${UDP_SC_SRC}
+    ${SSL_SC_SRC}
 )
 set_target_properties(
     opensocket

@@ -61,7 +61,7 @@ void SslServer::accept() {
     }
 }
 
-bool SslServer::start(int port, std::string certFilePath, std::string keyFilePath, int backlog = 10) {
+bool SslServer::start(int port, std::string certFilePath, std::string keyFilePath, int backlog) {
     createContext();
     configureContext(certFilePath, keyFilePath);
 
