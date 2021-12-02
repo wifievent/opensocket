@@ -43,7 +43,7 @@ void SslServer::accept() {
             break;
         }
         
-        spdlog::info("client accept: %d", clntsock);
+        spdlog::info("client accept: {}", clntsock);
         
         SslClientSocket* newsocket = new SslClientSocket(clntsock);
         spdlog::info("newsocket created");
