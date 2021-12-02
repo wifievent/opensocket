@@ -91,6 +91,21 @@ bool SslServer::stop() {
     return true;
 }
 
+void SslServer::openHandleClnt(SslClientSocket* clntsock) {    // run
+    this->handleClnt(clntsock);
+    //join
+    this->deleteClnt(clntsock);
+}
+
+void SslServer::deleteClnt(SslClientSocket* clntsock) {
+    clntsocks_.mutex_.lock();
+    clntsocks_.erase(clntsock);
+    clntsocks_.mutex_.unlock();
+
+    delete clntsock;
+    return;
+}
+
 bool SslServer::createContext() {
     const SSL_METHOD* method;
 
@@ -114,4 +129,18 @@ bool SslServer::configureContext(std::string certFilePath, std::string keyFilePa
         return false;
     }
     return true;
+}
+
+int SslServer::setSockOptforReuse() {
+    int optval = 1;
+    int result = 1;
+
+    #ifdef _WIN32
+    result = setsockopt(sock_, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
+    #endif
+    #ifdef __linux__
+    result = setsockopt(sock_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+    #endif
+
+    return result; //success 0, fail -1
 }

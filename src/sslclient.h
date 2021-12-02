@@ -9,7 +9,7 @@ class SslClient : public SslSocket //ssl
 {
 public:
     SslClient();
-    ~SslClient();
+    ~SslClient() {};
 
 public:
     int connect(std::string ip, int port);
