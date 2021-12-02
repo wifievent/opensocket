@@ -39,7 +39,6 @@ void SslServer::accept() {
         spdlog::info("Wait for accept client");
         
         if((clntsock=::accept(sock_, (struct sockaddr*)&cli_addr, &clntaddrsize)) < 0) {
-            spdlog::info(clntsock);
             spdlog::info("Accept call failed");
             break;
         }
@@ -47,10 +46,12 @@ void SslServer::accept() {
         spdlog::info("client accept: %d", clntsock);
         
         SslClientSocket* newsocket = new SslClientSocket(clntsock);
+        spdlog::info("newsocket created");
 
         newsocket->ssl_ = SSL_new(ctx_);
         SSL_set_fd(newsocket->ssl_, newsocket->sock_);
         if(SSL_accept(newsocket->ssl_) <= 0) {
+            spdlog::info("SSL_accept error");
             ERR_print_errors_fp(stderr);
         }
 
