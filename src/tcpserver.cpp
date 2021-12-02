@@ -66,8 +66,8 @@ bool TcpServer::start(int port, int backlog) {
 }
 
 bool TcpServer::stop() {
-    disconnect();
     acceptthread_->join();
+    disconnect();
 
     clntsocks_.mutex_.lock();
     for(TcpClientSocket* socket : clntsocks_) {

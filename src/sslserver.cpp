@@ -38,7 +38,8 @@ void SslServer::accept() {
     while(true) {    // server thread
         spdlog::info("Wait for accept client");
         
-        if((clntsock=::accept(sock_, (struct sockaddr*)&(cli_addr), &clntaddrsize)) < 0) {
+        if((clntsock=::accept(sock_, (struct sockaddr*)&cli_addr, &clntaddrsize)) < 0) {
+            spdlog::info(clntsock);
             spdlog::info("Accept call failed");
             break;
         }
@@ -76,8 +77,8 @@ bool SslServer::start(int port, std::string certFilePath, std::string keyFilePat
 }
 
 bool SslServer::stop() {
-    disconnect();
     acceptthread_->join();
+    disconnect();
 
     clntsocks_.mutex_.lock();
     for(SslClientSocket* socket : clntsocks_) {
