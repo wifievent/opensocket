@@ -39,6 +39,13 @@ set(UDP_BASE_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/udpsocket.cpp
 )
 
+# IP Raw Socket base source
+set(IP_RAW_BASE_SRC
+    ${SOCKET_BASE_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/iprawsocket.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/iprawsocket.cpp
+)
+
 # TCP Server/Client source
 set(TCP_SC_SRC
     ${SOCKET_BASE_SRC}
@@ -57,6 +64,15 @@ set(UDP_SC_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpclient.cpp
 )
 
+#IP Raw Socket Server/Client source
+set(IP_RAW_SC_SRC
+    ${IP_RAW_BASE_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iprawserver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iprawserver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iprawclient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iprawclient.cpp
+)
+
 # static library set
 set(-DBUILD_SHARED_LIBS OFF)
 
@@ -69,6 +85,7 @@ add_library(
     STATIC
     ${TCP_SC_SRC}
     ${UDP_SC_SRC}
+    ${IP_RAW_SC_SRC}
 )
 set_target_properties(
     opensocket

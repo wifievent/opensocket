@@ -1,5 +1,4 @@
-#ifndef SOCKET_H
-#define SOCKET_H
+#pragma once
 
 #include <stdio.h>
 #include <string.h>
@@ -34,5 +33,3 @@ public:
     virtual int send(char* buf, size_t len) = 0;
     virtual int recv(char* buf, size_t len) = 0;
 };
-
-#endif // SOCKET_H

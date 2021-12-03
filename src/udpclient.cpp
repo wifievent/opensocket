@@ -1,20 +1,22 @@
 #include "udpclient.h"
 
-int UdpClient::setSocketBroadcastable() {
+int UdpClient::setSocketBroadcastable()
+{
     int optval = 1;
     int result = 1;
 
-    #ifdef _WIN32
-    result = setsockopt(sock_, SOL_SOCKET, SO_BROADCAST, (char*) &optval, sizeof(optval));
-    #endif
-    #ifdef __linux__
+#ifdef _WIN32
+    result = setsockopt(sock_, SOL_SOCKET, SO_BROADCAST, (char*)&optval, sizeof(optval));
+#endif
+#ifdef __linux__
     result = setsockopt(sock_, SOL_SOCKET, SO_BROADCAST, &optval, sizeof(optval));
-    #endif
+#endif
 
-    return result; //success 0, fail -1
+    return result; // success 0, fail -1
 }
 
-void UdpClient::setSockAddr(std::string ip, int port) {
+void UdpClient::setSockAddr(std::string ip, int port)
+{
     memset(&sockAddr_, 0, sizeof(sockAddr_));
     sockAddr_.sin_family = AF_INET;
     sockAddr_.sin_port = htons(port);
@@ -22,14 +24,15 @@ void UdpClient::setSockAddr(std::string ip, int port) {
     memset(&sockAddr_.sin_zero, 0, sizeof(sockAddr_.sin_zero));
 }
 
-void UdpClient::setRecvTimeout(int sec, int millisec) {
-    struct timeval optVal = {sec, millisec}; //sec, millisec
+void UdpClient::setRecvTimeout(int sec, int millisec)
+{
+    struct timeval optVal = {sec, millisec}; // sec, millisec
     int optLen = sizeof(optVal);
 
-    #ifdef _WIM32
-    setsockopt(sock_, SOL_SOCKET, SO_RCVTIMEO, (char*) &optVal, optLen);
-    #endif
-    #ifdef __linux__
+#ifdef _WIM32
+    setsockopt(sock_, SOL_SOCKET, SO_RCVTIMEO, (char*)&optVal, optLen);
+#endif
+#ifdef __linux__
     setsockopt(sock_, SOL_SOCKET, SO_RCVTIMEO, &optVal, optLen);
-    #endif
+#endif
 }

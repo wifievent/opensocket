@@ -1,5 +1,4 @@
-#ifndef UDPSOCKET_H
-#define UDPSOCKET_H
+#pragma once
 
 #include "socket.h"
 
@@ -12,5 +11,3 @@ public:
     int send(char* buf, size_t len) override;
     int recv(char* buf, size_t len) override;
 };
-
-#endif // UDPSOCKET_H

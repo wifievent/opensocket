@@ -1,5 +1,4 @@
-#ifndef TCPCLIENT_H
-#define TCPCLIENT_H
+#pragma once
 
 #include <string>
 
@@ -15,5 +14,3 @@ public:
 public:
     int connect(std::string ip, int port);
 };
-
-#endif // TCPCLIENT_H
