@@ -45,8 +45,9 @@ void SslServer::accept() {
         
         spdlog::info("client accept: {}", clntsock);
         
+        spdlog::info("start make newsocket");
         SslClientSocket* newsocket = new SslClientSocket(clntsock);
-        spdlog::info("newsocket created");
+        spdlog::info("end make newsocket");
 
         newsocket->ssl_ = SSL_new(ctx_);
         SSL_set_fd(newsocket->ssl_, newsocket->sock_);
@@ -78,7 +79,9 @@ bool SslServer::start(int port, std::string certFilePath, std::string keyFilePat
 }
 
 bool SslServer::stop() {
+    spdlog::info("acceptthread join start");
     acceptthread_->join();
+    spdlog::info("acceptthread join end");
     disconnect();
 
     clntsocks_.mutex_.lock();
@@ -94,9 +97,13 @@ bool SslServer::stop() {
 }
 
 void SslServer::openHandleClnt(SslClientSocket* clntsock) {    // run
+    spdlog::info("start handleclnt of {}", clntsock->sock_);
     this->handleClnt(clntsock);
+    spdlog::info("end handleclnt of {}", clntsock->sock_);
     //join
+    spdlog::info("start deleteClnt of {}", clntsock->sock_);
     this->deleteClnt(clntsock);
+    spdlog::info("end deleteClnt of {}", clntsock->sock_);
 }
 
 void SslServer::deleteClnt(SslClientSocket* clntsock) {
