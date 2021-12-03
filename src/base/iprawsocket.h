@@ -9,5 +9,6 @@ public:
     ~IpRawSocket() override;
 
     int send(char* buf, size_t len) override;
-    int recv(char* buf, size_t len) override;
+    int recv(char* buf, size_t len=BUFSIZE) override;
+    void setSockAddr(std::string ip, int port);
 };
