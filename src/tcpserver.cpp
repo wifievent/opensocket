@@ -54,6 +54,7 @@ void TcpServer::accept()
         spdlog::info("client accept: %d", clntsock);
 
         TcpClientSocket* newsocket = new TcpClientSocket(clntsock);
+        spdlog::info("end make newsocket");
         newsocket->handlethread_ = new std::thread(&TcpServer::openHandleClnt, this, newsocket);
 
         clntsocks_.mutex_.lock();
@@ -77,8 +78,10 @@ bool TcpServer::start(int port, int backlog)
 
 bool TcpServer::stop()
 {
+    spdlog::info("acceptthread join start");
     disconnect();
     acceptthread_->join();
+    spdlog::info("acceptthread join end");
 
     clntsocks_.mutex_.lock();
     for (TcpClientSocket* socket : clntsocks_)
@@ -92,10 +95,14 @@ bool TcpServer::stop()
 }
 
 void TcpServer::openHandleClnt(TcpClientSocket* clntsock)
-{ // run
-    this->handleClnt(clntsock);
-    // join
+{
+    // run
+    spdlog::info("start handleclnt of {}", clntsock->sock_);
+    this->handleClnt(clntsock);    // join
+    spdlog::info("end handleclnt of {}", clntsock->sock_);
+    
     this->deleteClnt(clntsock);
+    spdlog::info("end deleteClnt of {}", clntsock->sock_);
 }
 
 void TcpServer::deleteClnt(TcpClientSocket* clntsock)

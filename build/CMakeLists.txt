@@ -39,6 +39,13 @@ set(UDP_BASE_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/udpsocket.cpp
 )
 
+# SSL Socket base source
+set(SSL_BASE_SRC
+    ${SOCKET_BASE_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/sslsocket.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/sslsocket.cpp
+)
+
 # IP Raw Socket base source
 set(IP_RAW_BASE_SRC
     ${SOCKET_BASE_SRC}
@@ -48,7 +55,7 @@ set(IP_RAW_BASE_SRC
 
 # TCP Server/Client source
 set(TCP_SC_SRC
-    ${SOCKET_BASE_SRC}
+    ${TCP_BASE_SRC}
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpserver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpserver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/tcpclient.h
@@ -64,13 +71,13 @@ set(UDP_SC_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/udpclient.cpp
 )
 
-#IP Raw Socket Server/Client source
-set(IP_RAW_SC_SRC
-    ${IP_RAW_BASE_SRC}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iprawserver.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iprawserver.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iprawclient.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iprawclient.cpp
+# SSL Server/Client source
+set(SSL_SC_SRC
+    ${SSL_BASE_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslserver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslserver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslclient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/sslclient.cpp
 )
 
 # static library set
@@ -85,7 +92,8 @@ add_library(
     STATIC
     ${TCP_SC_SRC}
     ${UDP_SC_SRC}
-    ${IP_RAW_SC_SRC}
+    ${SSL_SC_SRC}
+    ${IP_RAW_BASE_SRC}
 )
 set_target_properties(
     opensocket
