@@ -1,5 +1,4 @@
-#ifndef UDPSERVER_H
-#define UDPSERVER_H
+#pragma once
 
 #include <thread>
 
@@ -23,5 +22,3 @@ protected:
     virtual void handleClnt() = 0;
 
 };
-
-#endif // UDPSERVER_H

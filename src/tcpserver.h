@@ -1,5 +1,4 @@
-#ifndef TCPSERVER_H
-#define TCPSERVER_H
+#pragma once
 
 #include <set>
 #include <thread>
@@ -41,5 +40,3 @@ protected:
     void openHandleClnt(TcpClientSocket* clntsock);
     virtual void handleClnt(TcpClientSocket* clntsock) = 0;
 };
-
-#endif // TCPSERVER_H
