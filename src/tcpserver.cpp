@@ -51,7 +51,7 @@ void TcpServer::accept()
             break;
         }
 
-        spdlog::info("client accept: %d", clntsock);
+        spdlog::info("client accept: {}", clntsock);
 
         TcpClientSocket* newsocket = new TcpClientSocket(clntsock);
         spdlog::info("end make newsocket");
