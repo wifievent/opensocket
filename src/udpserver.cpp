@@ -37,8 +37,8 @@ bool UdpServer::start(int port)
 
 bool UdpServer::stop()
 {
-    disconnect();
     th_->join();
+    disconnect();
     return true;
 }
 

@@ -79,9 +79,9 @@ bool TcpServer::start(int port, int backlog)
 bool TcpServer::stop()
 {
     spdlog::info("acceptthread join start");
-    disconnect();
     acceptthread_->join();
     spdlog::info("acceptthread join end");
+    disconnect();
 
     clntsocks_.mutex_.lock();
     for (TcpClientSocket* socket : clntsocks_)
