@@ -80,9 +80,9 @@ bool SslServer::start(int port, std::string certFilePath, std::string keyFilePat
 
 bool SslServer::stop() {
     spdlog::info("acceptthread join start");
+    disconnect();
     acceptthread_->join();
     spdlog::info("acceptthread join end");
-    disconnect();
 
     clntsocks_.mutex_.lock();
     for(SslClientSocket* socket : clntsocks_) {
