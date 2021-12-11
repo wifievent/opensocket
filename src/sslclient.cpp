@@ -10,15 +10,20 @@ int SslClient::connect(std::string ip, int port) { // connect
     sockAddr_.sin_addr.s_addr = inet_addr(ip.c_str());
     sockAddr_.sin_port = htons(port);
     if(::connect(sock_, (struct sockaddr *)&(sockAddr_), sizeof(sockAddr_)) != 0) {
-        spdlog::debug("Cannot ::connect to server");
+        DLOG(ERROR) << "SslClient::connect() connect error";
+        DLOG(ERROR) << "SslClient::connect() Can't connect to server";
         return -1;
     }
+    DLOG(INFO) << "SslClient::connect() connect success";
+
     ssl_ = SSL_new(ctx_);
     SSL_set_fd(ssl_, sock_);
     if(SSL_connect(ssl_) == -1) {
-        spdlog::debug("SSL_connect error");
+        DLOG(ERROR) << "SslClient::connect() SSL_connect error";
         return -1;
     }
+    DLOG(INFO) << "SslClient::connect() SSL_connect success";
+
     return 0;
     // success 0, fail -1
     //SSL_shutdown(ssl_);
@@ -33,8 +38,11 @@ bool SslClient::createContext() {
 
     ctx_ = SSL_CTX_new(method);
     if(!ctx_) {
-        spdlog::debug("Unable to create SSL context");
+        DLOG(ERROR) << "SslClient::createContext() SSL_CTX_new error";
+        DLOG(ERROR) << "SslClient::createContext() Can't create SSL context";
         return false;
     }
+    DLOG(INFO) << "SslClient::createContext() SSL_CTX_new success";
+    
     return true;
 }
