@@ -46,13 +46,6 @@ set(SSL_BASE_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/sslsocket.cpp
 )
 
-# IP Raw Socket base source
-set(IP_RAW_BASE_SRC
-    ${SOCKET_BASE_SRC}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/iprawsocket.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/iprawsocket.cpp
-)
-
 # TCP Server/Client source
 set(TCP_SC_SRC
     ${TCP_BASE_SRC}
@@ -93,8 +86,12 @@ add_library(
     ${TCP_SC_SRC}
     ${UDP_SC_SRC}
     ${SSL_SC_SRC}
-    ${IP_RAW_BASE_SRC}
 )
+
+# glog library link
+find_package (glog REQUIRED)
+target_link_libraries(opensocket glog::glog)
+
 set_target_properties(
     opensocket
     PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR}
