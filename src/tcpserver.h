@@ -12,7 +12,7 @@ struct TcpClientSocket : public TcpSocket
     std::thread* handlethread_{nullptr};
 };
 
-class SocketList : public std::set<TcpClientSocket*>
+class TcpSocketList : public std::set<TcpClientSocket*>
 {
 public:
     std::mutex mutex_;
@@ -20,7 +20,7 @@ public:
 
 class TcpServer : public TcpSocket
 {
-    SocketList clntsocks_;
+    TcpSocketList clntsocks_;
     std::thread* acceptthread_{nullptr};
 
 public:
