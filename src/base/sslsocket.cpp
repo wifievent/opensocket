@@ -8,8 +8,8 @@ SslSocket::SslSocket() {
 }
 
 SslSocket::~SslSocket() {
-    SSL_CTX_free(ctx_);
     disconnect();
+    //SSL_CTX_free(ctx_);
 }
 
 int SslSocket::send(char* buf, size_t len)

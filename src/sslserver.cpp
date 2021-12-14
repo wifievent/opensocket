@@ -111,6 +111,7 @@ void SslServer::deleteClnt(SslClientSocket* clntsock) {
     clntsocks_.erase(clntsock);
     clntsocks_.mutex_.unlock();
 
+    clntsock->disconnect();
     delete clntsock;
     return;
 }
