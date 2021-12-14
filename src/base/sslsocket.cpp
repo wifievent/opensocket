@@ -4,12 +4,15 @@ SslSocket::SslSocket() {
     if ((sock_ = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
         spdlog::info("socket create failed");
     }
+    ctx_ = nullptr;
     spdlog::info("socket create success");
 }
 
 SslSocket::~SslSocket() {
     disconnect();
-    //SSL_CTX_free(ctx_);
+    if(ctx_ != nullptr) {
+        SSL_CTX_free(ctx_);
+    }
 }
 
 int SslSocket::send(char* buf, size_t len)
