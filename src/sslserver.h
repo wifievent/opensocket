@@ -13,7 +13,7 @@ struct SslClientSocket : public SslSocket
     std::thread* handlethread_{nullptr};
 };
 
-class SocketList : public std::set<SslClientSocket*>
+class SslSocketList : public std::set<SslClientSocket*>
 {
 public:
     std::mutex mutex_;
@@ -21,7 +21,7 @@ public:
 
 class SslServer : public SslSocket
 {
-    SocketList clntsocks_;
+    SslSocketList clntsocks_;
     std::thread* acceptthread_{nullptr};
 
 public:
