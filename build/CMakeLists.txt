@@ -16,9 +16,6 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../external)
-
 # set socket base source
 set(SOCKET_BASE_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/base/socket.h

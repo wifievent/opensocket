@@ -16,7 +16,6 @@
 #endif
 
 #include <glog/logging.h>
-#include "spdlog/spdlog.h"
 
 #define BUFSIZE 65536
 
