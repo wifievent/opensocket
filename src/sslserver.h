@@ -25,6 +25,9 @@ class SslServer : public SslSocket
     std::thread* acceptthread_{nullptr};
 
 public:
+    SSL_CTX* ctx_;
+
+public:
     SslServer();
     ~SslServer();
 
@@ -41,6 +44,7 @@ protected:
     void openHandleClnt(SslClientSocket* clntsock);
     virtual void handleClnt(SslClientSocket* clntsock) = 0;
     bool createContext();
+    void freeContext();
     bool configureContext(std::string certFilePath, std::string keyFilePath);
 };
 

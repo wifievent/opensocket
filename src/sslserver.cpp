@@ -2,6 +2,8 @@
 
 SslServer::SslServer() {
     setSockOptforReuse();
+    ctx_ = nullptr;
+    createContext();
 }
 
 SslServer::~SslServer() {}
@@ -68,7 +70,6 @@ void SslServer::accept() {
 }
 
 bool SslServer::start(int port, std::string certFilePath, std::string keyFilePath, int backlog) {
-    createContext();
     configureContext(certFilePath, keyFilePath);
 
     if(bind(port) && listen(backlog)) {
@@ -129,6 +130,12 @@ bool SslServer::createContext() {
 
     DLOG(INFO) << "SslServer::createContext() SSL_CTX_new success";
     return true;
+}
+
+void SslServer::freeContext() {
+    if(ctx_ != nullptr) {
+        SSL_CTX_free(ctx_);
+    }
 }
 
 bool SslServer::configureContext(std::string certFilePath, std::string keyFilePath) {

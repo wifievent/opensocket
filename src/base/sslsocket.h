@@ -10,7 +10,6 @@
 class SslSocket : public Socket
 {
 public:
-    SSL_CTX* ctx_;
     SSL* ssl_;
 
 public:
