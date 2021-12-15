@@ -1,0 +1,4 @@
+/home/kali/BoB-10/project/opensocket/app/example/UDP/messanger/build/CMakeFiles/udpmsgclient.dir
+/home/kali/BoB-10/project/opensocket/app/example/UDP/messanger/build/CMakeFiles/udpmsgserver.dir
+/home/kali/BoB-10/project/opensocket/app/example/UDP/messanger/build/CMakeFiles/edit_cache.dir
+/home/kali/BoB-10/project/opensocket/app/example/UDP/messanger/build/CMakeFiles/rebuild_cache.dir
