@@ -16,9 +16,10 @@ bool UdpServer::bind(int port)
 
     if (::bind(sock_, (struct sockaddr*)&sockAddr_, sizeof(sockAddr_)) == -1)
     {
-        spdlog::info("bind() error");
+        DLOG(ERROR) << "UdpServer::bind() failed";
         return false;
     }
+    DLOG(INFO) << "UdpServer::bind() success";
 
     return true;
 }
@@ -27,11 +28,11 @@ bool UdpServer::start(int port)
 {
     if (bind(port))
     {
-        spdlog::info("bind() success");
+        DLOG(INFO) << "UdpServer::start() success";
         th_ = new std::thread(&UdpServer::openHandleClnt, this);
         return true;
     }
-    spdlog::info("bind() fail");
+    DLOG(ERROR) << "UdpServer::start() error";
     return false;
 }
 

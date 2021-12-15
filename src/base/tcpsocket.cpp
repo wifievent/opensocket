@@ -4,10 +4,10 @@ TcpSocket::TcpSocket()
 {
     if ((sock_ = socket(PF_INET, SOCK_STREAM, 0)) < 0)
     {
-        spdlog::info("socket create failed");
+        DLOG(ERROR) << "TcpSocket::TcpSocket() socket() failed";
         sock_ = 0;
     }
-    spdlog::info("socket create success");
+    DLOG(INFO) << "TcpSocket::TcpSocket() socket() success";
 }
 
 TcpSocket::~TcpSocket()
@@ -28,7 +28,7 @@ int TcpSocket::recv(char* buf, size_t len)
 
     if (recv_len == -1)
     {
-        spdlog::info("Can't recv data");
+        DLOG(INFO) << "TcpSocket::recv() recv() failed";
     }
 
     return recv_len;

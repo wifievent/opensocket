@@ -15,7 +15,7 @@
 #include <arpa/inet.h>
 #endif
 
-#include "spdlog/spdlog.h"
+#include <glog/logging.h>
 
 #define BUFSIZE 65536
 

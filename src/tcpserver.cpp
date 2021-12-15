@@ -16,9 +16,11 @@ bool TcpServer::bind(int port)
 
     if (::bind(sock_, (struct sockaddr*)&sockAddr_, sizeof(sockAddr_)) == -1)
     {
-        spdlog::info("bind() error");
+        DLOG(ERROR) << "TcpServer::bind() failed";
         return false;
     }
+
+    DLOG(INFO) << "TcpServer::bind() success";
 
     return true;
 }
@@ -27,34 +29,38 @@ bool TcpServer::listen(int backlog)
 {
     if (::listen(sock_, backlog) == -1)
     {
-        spdlog::info("listen() error");
+        DLOG(ERROR) << "TcpServer::listen() failed";
         return false;
     }
+
+    DLOG(INFO) << "TcpServer::listen() success";
 
     return true;
 }
 
 void TcpServer::accept()
 {
-    spdlog::info("open!");
+    DLOG(INFO) << "TcpServer::accept() open!";
     sockaddr_in cli_addr;
     unsigned int clntaddrsize = sizeof(cli_addr);
     int clntsock;
 
     while (true)
     { // server thread
-        spdlog::info("Wait for accept client");
+
+        DLOG(INFO) << "TcpServer::accept() waiting for client";
 
         if ((clntsock = ::accept(sock_, (struct sockaddr*)&(cli_addr), &clntaddrsize)) < 0)
         {
-            spdlog::info("Accept call failed");
+            DLOG(ERROR) << "TcpServer::accept() Accept call failed";
             break;
         }
 
-        spdlog::info("client accept: {}", clntsock);
+        DLOG(INFO) << "TcpServer::accept() client connected" << clntsock;
 
         TcpClientSocket* newsocket = new TcpClientSocket(clntsock);
-        spdlog::info("end make newsocket");
+        DLOG(INFO) << "TcpServer::accept() new socket created" << newsocket->sock_;
+        
         newsocket->handlethread_ = new std::thread(&TcpServer::openHandleClnt, this, newsocket);
 
         clntsocks_.mutex_.lock();
@@ -67,21 +73,22 @@ bool TcpServer::start(int port, int backlog)
 {
     if (bind(port) && listen(backlog))
     {
-        spdlog::info("bind() listen() success");
+        DLOG(INFO) << "TcpServer::start() success";
         acceptthread_ = new std::thread(&TcpServer::accept, this);
         return true;
     }
 
-    spdlog::info("bind() listen() fail");
+    DLOG(ERROR) << "TcpServer::start() failed";
     return false;
 }
 
 bool TcpServer::stop()
 {
-    spdlog::info("acceptthread join start");
+    DLOG(INFO) << "TcpServer::stop() start";
     disconnect();
+    DLOG(INFO) << "TcpServer::stop() acceptthread join start";
     acceptthread_->join();
-    spdlog::info("acceptthread join end");
+    DLOG(INFO) << "TcpServer::stop() acceptthread join end";
 
     clntsocks_.mutex_.lock();
     for (TcpClientSocket* socket : clntsocks_)
@@ -97,12 +104,12 @@ bool TcpServer::stop()
 void TcpServer::openHandleClnt(TcpClientSocket* clntsock)
 {
     // run
-    spdlog::info("start handleclnt of {}", clntsock->sock_);
+    DLOG(INFO) << "TcpServer::openHandleClnt() handleClnt start" << clntsock->sock_;
     this->handleClnt(clntsock);    // join
-    spdlog::info("end handleclnt of {}", clntsock->sock_);
-    
+    DLOG(INFO) << "TcpServer::openHandleClnt() handleClnt end" << clntsock->sock_;
+
     this->deleteClnt(clntsock);
-    spdlog::info("end deleteClnt of {}", clntsock->sock_);
+    DLOG(INFO) << "TcpServer::openHandleClnt() Client delete" << clntsock->sock_;
 }
 
 void TcpServer::deleteClnt(TcpClientSocket* clntsock)

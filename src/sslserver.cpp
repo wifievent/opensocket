@@ -13,48 +13,51 @@ bool SslServer::bind(int port) {
     sockAddr_.sin_port = htons(port);
     
     if(::bind(sock_, (struct sockaddr*)&sockAddr_, sizeof(sockAddr_)) == -1) {
-        spdlog::info("bind() error");
+        DLOG(ERROR) << "SslServer::bind() failed";
         return false;
     }
+    DLOG(INFO) << "SslServer::bind() success";
 
     return true;
 }
 
 bool SslServer::listen(int backlog) {
     if(::listen(sock_, backlog)==-1) {
-        spdlog::info("listen() error");
+        DLOG(ERROR) << "SslServer::listen() failed";
         return false;
     }
+    DLOG(INFO) << "SslServer::listen() success";
 
     return true;
 }
 
 void SslServer::accept() {
-    spdlog::info("open!");
+    DLOG(INFO) << "SslServer::accept() open!";
     sockaddr_in cli_addr;
     unsigned int clntaddrsize = sizeof(cli_addr);
     int clntsock;
 
     while(true) {    // server thread
-        spdlog::info("Wait for accept client");
+        DLOG(INFO) << "SslServer::accept() waiting for client";
         
         if((clntsock=::accept(sock_, (struct sockaddr*)&cli_addr, &clntaddrsize)) < 0) {
-            spdlog::info("Accept call failed");
+            DLOG(ERROR) << "SslServer::accept() Accept call failed";
             break;
         }
+
+        DLOG(INFO) << "SslServer::accept() client connected" << clntsock;
         
-        spdlog::info("client accept: {}", clntsock);
-        
-        spdlog::info("start make newsocket");
         SslClientSocket* newsocket = new SslClientSocket(clntsock);
-        spdlog::info("end make newsocket");
+        DLOG(INFO) << "SslServer::accept() new socket created" << newsocket->sock_;
 
         newsocket->ssl_ = SSL_new(ctx_);
         SSL_set_fd(newsocket->ssl_, newsocket->sock_);
         if(SSL_accept(newsocket->ssl_) <= 0) {
-            spdlog::info("SSL_accept error");
+            DLOG(ERROR) << "SslServer::accept() SSL_accept failed";
             ERR_print_errors_fp(stderr);
         }
+
+        DLOG(INFO) << "SslServer::accept() SSL_accept success";
 
         newsocket->handlethread_ = new std::thread(&SslServer::openHandleClnt, this, newsocket);
         
@@ -69,20 +72,21 @@ bool SslServer::start(int port, std::string certFilePath, std::string keyFilePat
     configureContext(certFilePath, keyFilePath);
 
     if(bind(port) && listen(backlog)) {
-        spdlog::info("bind() listen() success");
+        DLOG(INFO) << "SslServer::start() success";
         acceptthread_ = new std::thread(&SslServer::accept, this);
         return true;
     }
 
-    spdlog::info("bind() listen() fail");
+    DLOG(ERROR) << "SslServer::start() failed";
     return false;
 }
 
 bool SslServer::stop() {
-    spdlog::info("acceptthread join start");
+    DLOG(INFO) << "SslServer::stop() start";
     disconnect();
+    DLOG(INFO) << "SslServer::stop() acceptthread join start";
     acceptthread_->join();
-    spdlog::info("acceptthread join end");
+    DLOG(INFO) << "SslServer::stop() acceptthread join end";
 
     clntsocks_.mutex_.lock();
     for(SslClientSocket* socket : clntsocks_) {
@@ -97,13 +101,12 @@ bool SslServer::stop() {
 }
 
 void SslServer::openHandleClnt(SslClientSocket* clntsock) {    // run
-    spdlog::info("start handleclnt of {}", clntsock->sock_);
-    this->handleClnt(clntsock);
-    spdlog::info("end handleclnt of {}", clntsock->sock_);
-    //join
-    spdlog::info("start deleteClnt of {}", clntsock->sock_);
+    DLOG(INFO) << "SslServer::openHandleClnt() handleClnt start" << clntsock->sock_;
+    this->handleClnt(clntsock);    // join
+    DLOG(INFO) << "SslServer::openHandleClnt() handleClnt end" << clntsock->sock_;
+
     this->deleteClnt(clntsock);
-    spdlog::info("end deleteClnt of {}", clntsock->sock_);
+    DLOG(INFO) << "SslServer::openHandleClnt() Client delete" << clntsock->sock_;
 }
 
 void SslServer::deleteClnt(SslClientSocket* clntsock) {
@@ -122,19 +125,24 @@ bool SslServer::createContext() {
 
     ctx_ = SSL_CTX_new(method);
     if(!ctx_) {
-        spdlog::debug("Unable to create SSL context");
+        DLOG(ERROR) << "SslServer::createContext() SSL_CTX_new failed";
+        DLOG(ERROR) << "SslServer::createContext() Unable to create SSL context";
         return false;
     }
+
+    DLOG(INFO) << "SslServer::createContext() SSL_CTX_new success";
     return true;
 }
 
 bool SslServer::configureContext(std::string certFilePath, std::string keyFilePath) {
     if(SSL_CTX_use_certificate_file(ctx_, certFilePath.c_str(), SSL_FILETYPE_PEM) <= 0) {
-        spdlog::debug("Unable to configureContext in certfile");
+        DLOG(ERROR) << "SslServer::configureContext() SSL_CTX_use_certificate_file failed";
+        DLOG(ERROR) << "SslServer::configureContext() Unable to configure context in certificate";
         return false;
     }
     if(SSL_CTX_use_PrivateKey_file(ctx_, keyFilePath.c_str(), SSL_FILETYPE_PEM) <= 0) {
-        spdlog::debug("Unable to configureContext in keyfile");
+        DLOG(ERROR) << "SslServer::configureContext() SSL_CTX_use_PrivateKey_file failed";
+        DLOG(ERROR) << "SslServer::configureContext() Unable to configure context in key";
         return false;
     }
     return true;

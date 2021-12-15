@@ -4,10 +4,10 @@ UdpSocket::UdpSocket()
 {
     if ((sock_ = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
     {
-        spdlog::info("socket create failed");
+        DLOG(ERROR) << "UdpSocket::UdpSocket() socket() failed";
         sock_ = 0;
     }
-    spdlog::info("socket create success");
+    DLOG(INFO) << "UdpSocket::UdpSocket() socket() success";
 }
 
 UdpSocket::~UdpSocket()
@@ -34,7 +34,7 @@ int UdpSocket::recv(char* buf, size_t len)
 
     if (recv_len == -1)
     {
-        spdlog::info("Can't recv data");
+        DLOG(INFO) << "UdpSocket::recv() recvfrom() failed";
     }
 
     return recv_len;

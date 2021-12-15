@@ -1,11 +1,13 @@
 #include "sslsocket.h"
 
 SslSocket::SslSocket() {
-    if ((sock_ = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
-        spdlog::info("socket create failed");
+    if ((sock_ = socket(PF_INET, SOCK_STREAM, 0)) < 0)
+    {
+        DLOG(ERROR) << "SslSocket::SslSocket() socket() failed";
+        sock_ = 0;
     }
     ctx_ = nullptr;
-    spdlog::info("socket create success");
+    DLOG(INFO) << "SslSocket::SslSocket() socket() success";
 }
 
 SslSocket::~SslSocket() {
@@ -26,7 +28,7 @@ int SslSocket::recv(char* buf, size_t len)
     ssize_t recv_len = ::SSL_read(ssl_, buf, len);
 
     if (recv_len == -1) {
-        spdlog::info("Can't recv data");
+        DLOG(INFO) << "SslSocket::recv() SSL_read() failed";
     }
 
     return recv_len;
