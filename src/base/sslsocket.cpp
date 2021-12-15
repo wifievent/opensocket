@@ -7,14 +7,32 @@ SslSocket::SslSocket() {
         sock_ = 0;
     }
     ctx_ = nullptr;
+    ssl_ = nullptr;
     DLOG(INFO) << "SslSocket::SslSocket() socket() success";
 }
 
 SslSocket::~SslSocket() {
-    disconnect();
+    if(ssl_ != nullptr)
+    {
+        SSL_shutdown(ssl_);
+        SSL_free(ssl_);
+    }
     if(ctx_ != nullptr) {
         SSL_CTX_free(ctx_);
     }
+    Socket::disconnect();
+}
+
+int SslSocket::disconnect() {
+    if(ssl_ != nullptr)
+    {
+        SSL_shutdown(ssl_);
+        SSL_free(ssl_);
+    }
+    if(ctx_ != nullptr) {
+        SSL_CTX_free(ctx_);
+    }
+    Socket::disconnect();
 }
 
 int SslSocket::send(char* buf, size_t len)

@@ -90,13 +90,10 @@ bool SslServer::stop() {
 
     clntsocks_.mutex_.lock();
     for(SslClientSocket* socket : clntsocks_) {
-        SSL_shutdown(socket->ssl_);
-        SSL_free(socket->ssl_);
         socket->disconnect();
         socket->handlethread_->join();
     }
     clntsocks_.mutex_.unlock();
-    SSL_CTX_free(ctx_);
     return true;
 }
 

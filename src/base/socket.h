@@ -29,7 +29,7 @@ public:
     Socket() {}
     virtual ~Socket() {}
 
-    int disconnect();
+    virtual int disconnect();
     virtual int send(char* buf, size_t len) = 0;
     virtual int recv(char* buf, size_t len) = 0;
 };
