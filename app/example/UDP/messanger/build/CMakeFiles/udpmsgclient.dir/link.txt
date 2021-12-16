@@ -1,1 +1,0 @@
-/usr/bin/c++ -g -rdynamic CMakeFiles/udpmsgclient.dir/home/kali/BoB-10/project/opensocket/app/example/UDP/messanger/src/udpmsgclient.cpp.o -o /home/kali/BoB-10/project/opensocket/app/example/UDP/messanger/bin/udpmsgclient  ../../../../../lib/libopensocket.a /usr/lib/x86_64-linux-gnu/libglog.so.0.4.0 -lunwind /usr/lib/x86_64-linux-gnu/libgflags.so.2.2.2 -lpthread 
