@@ -1,0 +1,17 @@
+opensocket v0.9.0.0 Release Note
+=================================
+
+This release opensocket library v0.9.0.0
+
+Introduction:
+    C++ Socket Programming Library
+
+Configuration:
+    Standard C++
+    openssl
+    glog
+
+Feature:
+    UDP Socket
+    TCP Socket
+    SSL Socket
