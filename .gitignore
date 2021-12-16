@@ -1,6 +1,8 @@
 .vscode
 
-build/*
-!build/CMakeLists.txt
+*build/*
+!*build/CMakeLists.txt
+
+*/bin/*
 
 lib
