@@ -8,10 +8,10 @@ opensocket is c++ library for socket programming
 * **cmake:** c++ build
 
 ## Build
-0. Set dependencies
+0. Install dependencies library
         
-        sudo apt install libssl-dev libgoogl-glog-dev cmake g++
-        
+        sudo apt install libssl-dev libgoogle-glog-dev cmake g++
+
 1. Get source code this repository. clone with git
 
         git clone https://github.com/wifievent/opensocket.git
