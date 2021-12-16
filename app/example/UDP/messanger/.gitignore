@@ -1,6 +1,4 @@
-.vscode
-
 build/*
 !build/CMakeLists.txt
 
-lib
+bin
