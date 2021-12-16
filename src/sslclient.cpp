@@ -1,10 +1,11 @@
 #include "sslclient.h"
 
 SslClient::SslClient() {
+    ctx_ = nullptr;
+    createContext();
 }
 
 int SslClient::connect(std::string ip, int port) { // connect
-    createContext();
     memset(&sockAddr_, 0, sizeof(sockAddr_));
     sockAddr_.sin_family = AF_INET;
     sockAddr_.sin_addr.s_addr = inet_addr(ip.c_str());
@@ -45,4 +46,10 @@ bool SslClient::createContext() {
     DLOG(INFO) << "SslClient::createContext() SSL_CTX_new success";
     
     return true;
+}
+
+void SslClient::freeContext() {
+    if(ctx_ != nullptr) {
+        SSL_CTX_free(ctx_);
+    }
 }

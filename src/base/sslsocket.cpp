@@ -6,15 +6,27 @@ SslSocket::SslSocket() {
         DLOG(ERROR) << "SslSocket::SslSocket() socket() failed";
         sock_ = 0;
     }
-    ctx_ = nullptr;
+    ssl_ = nullptr;
     DLOG(INFO) << "SslSocket::SslSocket() socket() success";
 }
 
 SslSocket::~SslSocket() {
-    disconnect();
-    if(ctx_ != nullptr) {
-        SSL_CTX_free(ctx_);
+    if(ssl_ != nullptr)
+    {
+        SSL_shutdown(ssl_);
+        SSL_free(ssl_);
     }
+    Socket::disconnect();
+}
+
+int SslSocket::disconnect() {
+    if(ssl_ != nullptr)
+    {
+        SSL_shutdown(ssl_);
+        SSL_free(ssl_);
+    }
+    Socket::disconnect();
+    return 0;
 }
 
 int SslSocket::send(char* buf, size_t len)

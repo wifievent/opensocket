@@ -8,6 +8,9 @@
 class SslClient : public SslSocket //ssl
 {
 public:
+    SSL_CTX* ctx_;
+
+public:
     SslClient();
     ~SslClient() {};
 
@@ -16,6 +19,7 @@ public:
 
 protected:
     bool createContext();
+    void freeContext();
 };
 
 #endif // SSLCLIENT_H

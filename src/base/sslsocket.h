@@ -10,7 +10,6 @@
 class SslSocket : public Socket
 {
 public:
-    SSL_CTX* ctx_;
     SSL* ssl_;
 
 public:
@@ -18,6 +17,7 @@ public:
     ~SslSocket() override;
 
 public:
+    int disconnect() override;
     int send(char* buf, size_t len) override;
     int recv(char* buf, size_t len) override;
 };
