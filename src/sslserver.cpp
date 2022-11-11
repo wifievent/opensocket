@@ -47,10 +47,10 @@ void SslServer::accept() {
             break;
         }
 
-        DLOG(INFO) << "SslServer::accept() client connected" << clntsock;
+        DLOG(INFO) << "SslServer::accept() client connected " << clntsock;
         
         SslClientSocket* newsocket = new SslClientSocket(clntsock);
-        DLOG(INFO) << "SslServer::accept() new socket created" << newsocket->sock_;
+        DLOG(INFO) << "SslServer::accept() new socket created " << newsocket->sock_;
 
         newsocket->ssl_ = SSL_new(ctx_);
         SSL_set_fd(newsocket->ssl_, newsocket->sock_);
@@ -69,7 +69,23 @@ void SslServer::accept() {
     }
 }
 
-bool SslServer::start(int port, std::string certFilePath, std::string keyFilePath, int backlog) {
+bool SslServer::start(int port, std::string certFilePath, std::string keyFilePath, int backlog, int keylog) {
+    if (keylog) {
+        SSL_CTX_set_keylog_callback(
+            this->ctx_,
+            [](SSL const*, char const* line) {
+                FILE  * fp;
+                fp = fopen("key_log.log", "w");
+                if (fp == NULL) {
+                    DLOG(INFO) << "Failed to create log file";
+                }
+                fprintf(fp, "%s\n", line);
+                fclose(fp);
+                DLOG(INFO) << line;
+            }
+        );
+    }
+    
     configureContext(certFilePath, keyFilePath);
 
     if(bind(port) && listen(backlog)) {
@@ -99,12 +115,12 @@ bool SslServer::stop() {
 }
 
 void SslServer::openHandleClnt(SslClientSocket* clntsock) {    // run
-    DLOG(INFO) << "SslServer::openHandleClnt() handleClnt start" << clntsock->sock_;
+    DLOG(INFO) << "SslServer::openHandleClnt() handleClnt start " << clntsock->sock_;
     this->handleClnt(clntsock);    // join
-    DLOG(INFO) << "SslServer::openHandleClnt() handleClnt end" << clntsock->sock_;
+    DLOG(INFO) << "SslServer::openHandleClnt() handleClnt end " << clntsock->sock_;
 
     this->deleteClnt(clntsock);
-    DLOG(INFO) << "SslServer::openHandleClnt() Client delete" << clntsock->sock_;
+    DLOG(INFO) << "SslServer::openHandleClnt() Client delete " << clntsock->sock_;
 }
 
 void SslServer::deleteClnt(SslClientSocket* clntsock) {
