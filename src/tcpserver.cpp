@@ -56,10 +56,10 @@ void TcpServer::accept()
             break;
         }
 
-        DLOG(INFO) << "TcpServer::accept() client connected" << clntsock;
+        DLOG(INFO) << "TcpServer::accept() client connected " << clntsock;
 
         TcpClientSocket* newsocket = new TcpClientSocket(clntsock);
-        DLOG(INFO) << "TcpServer::accept() new socket created" << newsocket->sock_;
+        DLOG(INFO) << "TcpServer::accept() new socket created " << newsocket->sock_;
         
         newsocket->handlethread_ = new std::thread(&TcpServer::openHandleClnt, this, newsocket);
 
@@ -104,12 +104,12 @@ bool TcpServer::stop()
 void TcpServer::openHandleClnt(TcpClientSocket* clntsock)
 {
     // run
-    DLOG(INFO) << "TcpServer::openHandleClnt() handleClnt start" << clntsock->sock_;
+    DLOG(INFO) << "TcpServer::openHandleClnt() handleClnt start " << clntsock->sock_;
     this->handleClnt(clntsock);    // join
-    DLOG(INFO) << "TcpServer::openHandleClnt() handleClnt end" << clntsock->sock_;
+    DLOG(INFO) << "TcpServer::openHandleClnt() handleClnt end " << clntsock->sock_;
 
     this->deleteClnt(clntsock);
-    DLOG(INFO) << "TcpServer::openHandleClnt() Client delete" << clntsock->sock_;
+    DLOG(INFO) << "TcpServer::openHandleClnt() Client delete " << clntsock->sock_;
 }
 
 void TcpServer::deleteClnt(TcpClientSocket* clntsock)

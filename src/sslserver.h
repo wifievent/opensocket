@@ -35,7 +35,7 @@ public:
     bool bind(int port);
     bool listen(int backlog = 10);
     void accept();
-    bool start(int port, std::string certFilePath, std::string keyFilePath, int backlog = 10);
+    bool start(int port, std::string certFilePath, std::string keyFilePath, int backlog = 10, int keylog = 0);
     bool stop();
 
 protected:
