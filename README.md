@@ -26,3 +26,12 @@ opensocket is c++ library for socket programming
 ## Library Use Examples
 * **UDP:** messanger (**Files:** [Examples for UDP](app/example))
 * **TCP/SSL(TLS):** tlstimer (**GitHub:** [Examples for TCP and SSL(TLS)](https://github.com/maro5397/tlstimer))
+
+## Refer
+0. Install glog in Ubuntu
+        
+        git clone https://github.com/google/glog.git
+        cd glog
+        cmake .
+        make
+        export CMAKE_PREFIX_PATH=~/glog
