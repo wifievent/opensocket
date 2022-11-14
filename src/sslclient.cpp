@@ -49,16 +49,16 @@ bool SslClient::createContext() {
     SSL_load_error_strings();
 
     if(verison_ == 1.0) {
-        method = TLSv1_server_method();
+        method = TLSv1_client_method();
     }
     else if(verison_ == 1.1) {
-        method = TLSv1_1_server_method();
+        method = TLSv1_1_client_method();
     }
     else if(verison_ == 1.2) {
-        method = TLSv1_2_server_method();
+        method = TLSv1_2_client_method();
     }
     else {
-        method = TLS_server_method();
+        method = TLS_client_method();
     }
     
     ctx_ = SSL_CTX_new(method);
