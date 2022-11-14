@@ -27,11 +27,11 @@ class SslServer : public SslSocket
 
 public:
     SSL_CTX* ctx_;
-    float verison_{0.0};
+    double verison_{0.0};
 
 public:
     SslServer();
-    SslServer(float version);
+    SslServer(double version);
     ~SslServer();
 
 public:

@@ -9,11 +9,11 @@ class SslClient : public SslSocket //ssl
 {
 public:
     SSL_CTX* ctx_;
-    float verison_{0.0};
+    double verison_{0.0};
 
 public:
     SslClient();
-    SslClient(float version);
+    SslClient(double version);
     ~SslClient() {};
 
 public:

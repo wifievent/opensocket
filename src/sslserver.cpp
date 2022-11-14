@@ -6,7 +6,7 @@ SslServer::SslServer() {
     createContext();
 }
 
-SslServer::SslServer(float version) {
+SslServer::SslServer(double version) {
     setSockOptforReuse();
     ctx_ = nullptr;
     verison_ = version;

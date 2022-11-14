@@ -5,7 +5,7 @@ SslClient::SslClient() {
     createContext();
 }
 
-SslClient::SslClient(float version) {
+SslClient::SslClient(double version) {
     ctx_ = nullptr;
     verison_ = version;
     createContext();
