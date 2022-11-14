@@ -3,6 +3,7 @@
 SslServer::SslServer() {
     setSockOptforReuse();
     ctx_ = nullptr;
+    DLOG(INFO) << "SslServer::SslServer() default version";
     createContext();
 }
 
@@ -10,6 +11,7 @@ SslServer::SslServer(double version) {
     setSockOptforReuse();
     ctx_ = nullptr;
     verison_ = version;
+    DLOG(INFO) << "SslServer::SslServer() " << verison_ << " version";
     createContext();
 }
 

@@ -2,12 +2,14 @@
 
 SslClient::SslClient() {
     ctx_ = nullptr;
+    DLOG(INFO) << "SslServer::SslServer() default version";
     createContext();
 }
 
 SslClient::SslClient(double version) {
     ctx_ = nullptr;
     verison_ = version;
+    DLOG(INFO) << "SslServer::SslServer() " << verison_ << " version";
     createContext();
 }
 
