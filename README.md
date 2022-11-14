@@ -23,7 +23,6 @@ opensocket is c++ library for socket programming
         cmake .
         make
 
-## Examples
-Library use examples:
-[Examples for UDP](app/example)
-[Examples for TCP/SSL(TLS)](https://github.com/maro5397/tlstimer)
+## Library Use Examples
+* **UDP:** messanger (**Files:** [Examples for UDP](app/example))
+* **TCP/SSL(TLS):** tlstimer (**GitHub:** [openssl/openssl](https://github.com/openssl/openssl))
