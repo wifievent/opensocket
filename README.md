@@ -25,4 +25,4 @@ opensocket is c++ library for socket programming
 
 ## Library Use Examples
 * **UDP:** messanger (**Files:** [Examples for UDP](app/example))
-* **TCP/SSL(TLS):** tlstimer (**GitHub:** [Examples for TCP and SSL(TLS)](https://github.com/openssl/openssl))
+* **TCP/SSL(TLS):** tlstimer (**GitHub:** [Examples for TCP and SSL(TLS)](https://github.com/maro5397/tlstimer))
