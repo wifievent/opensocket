@@ -6,6 +6,13 @@ SslServer::SslServer() {
     createContext();
 }
 
+SslServer::SslServer(float version) {
+    setSockOptforReuse();
+    ctx_ = nullptr;
+    verison_ = version;
+    createContext();
+}
+
 SslServer::~SslServer() {}
 
 bool SslServer::bind(int port) {
@@ -69,24 +76,14 @@ void SslServer::accept() {
     }
 }
 
-bool SslServer::start(int port, std::string certFilePath, std::string keyFilePath, int backlog, int keylog) {
+bool SslServer::start(int port, std::string certFilePath, std::string keyFilePath, char* cipherlist, bool keylog, int backlog) {
     if (keylog) {
-        SSL_CTX_set_keylog_callback(
-            this->ctx_,
-            [](SSL const*, char const* line) {
-                FILE  * fp;
-                fp = fopen("key_log.log", "w");
-                if (fp == NULL) {
-                    DLOG(INFO) << "Failed to create log file";
-                }
-                fprintf(fp, "%s\n", line);
-                fclose(fp);
-                DLOG(INFO) << line;
-            }
-        );
+        keyLog();
     }
     
-    configureContext(certFilePath, keyFilePath);
+    if(!configureContext(certFilePath, keyFilePath, cipherlist)) {
+        exit(-1);
+    }
 
     if(bind(port) && listen(backlog)) {
         DLOG(INFO) << "SslServer::start() success";
@@ -135,7 +132,21 @@ void SslServer::deleteClnt(SslClientSocket* clntsock) {
 bool SslServer::createContext() {
     const SSL_METHOD* method;
 
-    method = TLS_server_method();
+    OpenSSL_add_all_algorithms();
+    SSL_load_error_strings();
+
+    if(verison_ == 1.0) {
+        method = TLSv1_server_method();
+    }
+    else if(verison_ == 1.1) {
+        method = TLSv1_1_server_method();
+    }
+    else if(verison_ == 1.2) {
+        method = TLSv1_2_server_method();
+    }
+    else {
+        method = TLS_server_method();
+    }
 
     ctx_ = SSL_CTX_new(method);
     if(!ctx_) {
@@ -154,7 +165,20 @@ void SslServer::freeContext() {
     }
 }
 
-bool SslServer::configureContext(std::string certFilePath, std::string keyFilePath) {
+bool SslServer::configureContext(std::string certFilePath, std::string keyFilePath, char* cipherlist) {
+    if(verison_ == 0.0) {
+        if(!SSL_CTX_set_ciphersuites(ctx_, cipherlist)) {
+            DLOG(ERROR) << "SslServer::createContext() SSL_CTX_set_cipher_list failed";
+            return false;
+        }
+    }
+    else {
+        if(!SSL_CTX_set_cipher_list(ctx_, cipherlist)) {
+            DLOG(ERROR) << "SslServer::createContext() SSL_CTX_set_cipher_list failed";
+            return false;
+        }
+    }
+
     if(SSL_CTX_use_certificate_file(ctx_, certFilePath.c_str(), SSL_FILETYPE_PEM) <= 0) {
         DLOG(ERROR) << "SslServer::configureContext() SSL_CTX_use_certificate_file failed";
         DLOG(ERROR) << "SslServer::configureContext() Unable to configure context in certificate";
@@ -180,4 +204,20 @@ int SslServer::setSockOptforReuse() {
     #endif
 
     return result; //success 0, fail -1
+}
+
+void SslServer::keyLog() {
+    SSL_CTX_set_keylog_callback(
+        this->ctx_,
+        [](SSL const*, char const* line) {
+            FILE  * fp;
+            fp = fopen("key_log.log", "a");
+            if (fp == NULL) {
+                DLOG(INFO) << "Failed to create log file";
+            }
+            fprintf(fp, "%s\n", line);
+            fclose(fp);
+            DLOG(INFO) << line;
+        }
+    );
 }

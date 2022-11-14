@@ -5,7 +5,17 @@ SslClient::SslClient() {
     createContext();
 }
 
-int SslClient::connect(std::string ip, int port) { // connect
+SslClient::SslClient(float version) {
+    ctx_ = nullptr;
+    verison_ = version;
+    createContext();
+}
+
+int SslClient::connect(std::string ip, int port, char* cipherlist) { // connect
+    if(!configureContext(cipherlist)) {
+        exit(-1);
+    }
+
     memset(&sockAddr_, 0, sizeof(sockAddr_));
     sockAddr_.sin_family = AF_INET;
     sockAddr_.sin_addr.s_addr = inet_addr(ip.c_str());
@@ -35,16 +45,30 @@ int SslClient::connect(std::string ip, int port) { // connect
 bool SslClient::createContext() {
     const SSL_METHOD* method;
 
-    method = TLS_client_method();
+    OpenSSL_add_all_algorithms();
+    SSL_load_error_strings();
 
+    if(verison_ == 1.0) {
+        method = TLSv1_server_method();
+    }
+    else if(verison_ == 1.1) {
+        method = TLSv1_1_server_method();
+    }
+    else if(verison_ == 1.2) {
+        method = TLSv1_2_server_method();
+    }
+    else {
+        method = TLS_server_method();
+    }
+    
     ctx_ = SSL_CTX_new(method);
     if(!ctx_) {
         DLOG(ERROR) << "SslClient::createContext() SSL_CTX_new error";
         DLOG(ERROR) << "SslClient::createContext() Can't create SSL context";
         return false;
     }
+
     DLOG(INFO) << "SslClient::createContext() SSL_CTX_new success";
-    
     return true;
 }
 
@@ -52,4 +76,20 @@ void SslClient::freeContext() {
     if(ctx_ != nullptr) {
         SSL_CTX_free(ctx_);
     }
+}
+
+bool SslClient::configureContext(char* cipherlist) {
+    if(verison_ == 0.0) {
+        if(!SSL_CTX_set_ciphersuites(ctx_, cipherlist)) {
+            DLOG(ERROR) << "SslServer::createContext() SSL_CTX_set_cipher_list failed";
+            return false;
+        }
+    }
+    else {
+        if(!SSL_CTX_set_cipher_list(ctx_, cipherlist)) {
+            DLOG(ERROR) << "SslServer::createContext() SSL_CTX_set_cipher_list failed";
+            return false;
+        }
+    }
+    return true;
 }
